@@ -285,17 +285,6 @@
     enabled: true 
 
 
-- name: Remove brackets and quotes from cluster_ip
-  set_fact:
-    cluster_ip_var: "{{ cluster_ip | regex_replace('\\[', '') | regex_replace('\\]', '') | replace(\"'\",'')  | replace(\"'\",'') }}"
-
-
-##### Need to replace the proxy IP address in the nginx config
-- name: Entering a awx_admin_username Into secret File
-  replace:
-    path: "/etc/nginx/conf.d/eda-awx-ssl.conf"
-    regexp: 'eda-server'
-    replace: "{{ cluster_ip_var }}"
 
 
 - name: Start Nginx Reverse Proxy Server
