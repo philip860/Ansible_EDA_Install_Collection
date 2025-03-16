@@ -316,7 +316,7 @@
 
 
 ##### Need to replace the proxy IP address in the nginx config
-- name: Entering a awx_admin_username Into secret File
+- name: Entering a cluster_ip_var Into eda-awx-ssl.conf File
   replace:
     path: "/etc/nginx/conf.d/eda-awx-ssl.conf"
     regexp: 'eda-server'
