@@ -51,10 +51,10 @@
 
 
 
-- name: Copy Over set_proxy_IP_For_EDA_Server.sh to /admin_tools/eda_awx_install_config/
-  ansible.builtin.template:
-    src: "{{ role_path }}/files/config_files/set_proxy_IP_For_EDA_Server.sh"
-    dest: "/admin_tools/eda_awx_install_config/"   
+# - name: Copy Over set_proxy_IP_For_EDA_Server.sh to /admin_tools/eda_awx_install_config/
+#   ansible.builtin.template:
+#     src: "{{ role_path }}/files/config_files/set_proxy_IP_For_EDA_Server.sh"
+#     dest: "/admin_tools/eda_awx_install_config/"   
 
 
 
