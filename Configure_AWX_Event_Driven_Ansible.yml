@@ -44,3 +44,4 @@
     - eda_operator_setup
     - configure_standalone_eda_server
     # - configure_eda_server_proxy
+    #- wait_for_pods_to_initialize
