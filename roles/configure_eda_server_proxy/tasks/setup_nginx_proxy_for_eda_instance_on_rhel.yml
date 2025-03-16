@@ -30,7 +30,7 @@
 
 
 - name: Get EDA service NodePort
-  ansible.builtin.shell: "kubectl get service eda-service -n eda -o jsonpath='{.spec.ports[0].nodePort}'"
+  ansible.builtin.shell: "kubectl get service eda-ui -n eda -o jsonpath='{.spec.ports[0].nodePort}'"
   args:
     executable: /bin/bash
   register: eda_service_output
