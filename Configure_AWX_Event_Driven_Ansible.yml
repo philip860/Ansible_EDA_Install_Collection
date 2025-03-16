@@ -27,21 +27,21 @@
     #   prompt: "What is the password for the AWX Admin User?"
     #   private: no 
 
-    - name: eda_user_password_var
-      prompt: "Enter a password for local awx user to be created on system"
-      private: no 
+    # - name: eda_user_password_var
+    #   prompt: "Enter a password for local awx user to be created on system"
+    #   private: no 
 
 
-    - name: ansible_aap_controller
-      prompt: "Enter the hostname of the Ansible AAP/AWX Controller Server"
-      private: no  
+    # - name: ansible_aap_controller
+    #   prompt: "Enter the hostname of the Ansible AAP/AWX Controller Server"
+    #   private: no  
 
   roles:
   
-    - install_required_packages
-    - install_k3s
-    - generate_self_signed_tls_certs_for_awx_server
-    - eda_operator_setup
-    - configure_standalone_eda_server
-    - configure_eda_server_proxy
-    #- wait_for_pods_to_initialize
+    # - install_required_packages
+    # - install_k3s
+    # - generate_self_signed_tls_certs_for_awx_server
+    # - eda_operator_setup
+    # - configure_standalone_eda_server
+    # - configure_eda_server_proxy
+    - wait_for_pods_to_initialize
