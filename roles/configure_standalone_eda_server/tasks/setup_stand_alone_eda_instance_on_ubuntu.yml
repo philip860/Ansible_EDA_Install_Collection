@@ -1,27 +1,15 @@
 
-- name: Install nginx
-  ansible.builtin.yum:
-    name: nginx
-    state: present 
-
-- name: Install wget
-  ansible.builtin.yum:
-    name: wget
-    state: present 
-
-
-- name: Set SELinux Context For Nginx
-  ansible.builtin.shell:  setsebool -P httpd_can_network_connect 1
-  args:
-    executable: /bin/bash
+- name: Install Packages
+  ansible.builtin.apt:
+    name: "{{ item }}"
+    state: latest
+  loop:
+    - nginx
+    - wget
+    - tar
+    - jq
 
 
-- name: Permit traffic in default zone on port 5432/tcp For External Postgres Server
-  ansible.posix.firewalld:
-    port: 5432/tcp
-    permanent: yes
-    immediate: yes
-    state: enabled
 
 
 
@@ -131,44 +119,44 @@
 
 
 
+- name: Allow SSH
+  community.general.ufw:
+    rule: allow
+    name: OpenSSH
+
+- name: Allow port range 2379-2380
+  community.general.ufw:
+    rule: allow
+    port: 2379:2380
+    proto: tcp
+
 - name: Configure Firewall Ports For Kubernetes
-  ansible.posix.firewalld:
-    port: "{{ item }}/tcp"
-    permanent: true
-    state: enabled
-    immediate: true
+  community.general.ufw:
+    port: "{{ item }}"
+    rule: allow
+    proto: tcp
   loop:
     - 8443
     - 8080
     - 10250
     - 10248
-    - 2379-2380
     - 10259
     - 10255
     - 6443
     - 51820
     - 5432
     - 443
-    - 80 
+    - 80
 
-#For Pods
-- name: Configure Firewall K3s Source Network-1
-  ansible.posix.firewalld:
-    source: 10.42.0.0/16
-    zone: trusted
+
+- name: Configure Firewall For K3s Pod and Services Networks
+  community.general.ufw:
+    src:  "{{ item }}"
+    rule: allow
     state: enabled
-    permanent: true
-    immediate: true
-
-#For services
-- name: Configure Firewall K3s Source Network-2
-  ansible.posix.firewalld:
-    source: 10.43.0.0/16
-    zone: trusted
-    state: enabled
-    permanent: true
-    immediate: true
-
+  loop: 
+    - 10.42.0.0/16
+    - 10.43.0.0/16
 
 #### Need to re-arrange the kustomize.yaml file Location
 - name: Create the /admin_tools/eda_awx_install_config/kustomize_config Directory
@@ -198,13 +186,6 @@
     chdir: /admin_tools/eda_awx_install_config/eda-deploy
      
     
-- name: Enable masquerade for Public Zone for http service
-  ansible.posix.firewalld:
-    masquerade: yes
-    state: enabled
-    permanent: yes
-    immediate: yes
-    zone: public
 
 
 ####### There seems to be a bug with the sleep package, any times longer than 60s seem to freeze the terminal
@@ -228,7 +209,7 @@
 - name: Create a EDA user
   user:
    name: eda
-   password: "{{ awx_user_password_var | password_hash('sha512') }}"
+   password: "{{ eda_user_password_var | password_hash('sha512') }}"
    state: present
    shell: /bin/bash
    system: no
