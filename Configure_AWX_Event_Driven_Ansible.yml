@@ -23,13 +23,13 @@
     #   prompt: "What is the name of the AWX Admin User?"
     #   private: no 
 
-    - name: eda_admin_username_password
-      prompt: "What is the password for the AWX Admin User?"
-      private: no 
-
-    # - name: eda_user_password_var
-    #   prompt: "Enter a password for local awx user to be created on system"
+    # - name: eda_admin_username_password
+    #   prompt: "What is the password for the AWX Admin User?"
     #   private: no 
+
+    - name: eda_user_password_var
+      prompt: "Enter a password for local awx user to be created on system"
+      private: no 
 
 
     - name: ansible_aap_controller
