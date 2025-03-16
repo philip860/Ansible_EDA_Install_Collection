@@ -330,11 +330,12 @@
     enabled: true 
 
 #Seems to be an issue with k3s running EDA with firewalld enabled
-- name: Disable Firewalld
-  ansible.builtin.shell: systemctl stop firewalld && systemctl disable firewalld
+- name: Disable UFW on Ubuntu
+  ansible.builtin.shell: |
+    systemctl stop ufw
+    systemctl disable ufw
   args:
     executable: /bin/bash
-
 
 
 
