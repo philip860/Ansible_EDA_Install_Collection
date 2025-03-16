@@ -82,8 +82,6 @@
   file:
     path: "{{ item }}"
     state: directory
-    owner: nginx
-    group: nginx
     mode: 0775
   loop:
     - /etc/nginx/certs
