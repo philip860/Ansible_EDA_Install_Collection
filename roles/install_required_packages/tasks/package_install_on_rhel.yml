@@ -1,5 +1,5 @@
 
-- name: Install the Necessary Packages required to run AWX Server
+- name: Install the Necessary Packages required to run EDA Server
   yum:
     name:
       - git
