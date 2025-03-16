@@ -3,7 +3,7 @@
 
     - name: Get the name of the eda-ui pod
       ansible.builtin.shell: >
-        kubectl get pods -n awx --no-headers -o custom-columns=":metadata.name,:status.phase" | grep '^eda-ui' | awk '{print $1}'
+        kubectl get pods -n eda --no-headers -o custom-columns=":metadata.name,:status.phase" | grep '^eda-ui' | awk '{print $1}'
       register: ui_pod
       changed_when: false
 
@@ -16,7 +16,7 @@
 
         - name: Waiting 20mins for eda-ui pod to be in Running state
           ansible.builtin.shell: >
-            kubectl get pod {{ ui_pod.stdout }} -n awx -o jsonpath='{.status.phase}'
+            kubectl get pod {{ ui_pod.stdout }} -n eda -o jsonpath='{.status.phase}'
           register: ui_status
           retries: 20
           delay: 60
@@ -31,7 +31,7 @@
 
         - name: Re-checking and Waiting 10min for eda-ui pod to be in Running state after failure
           ansible.builtin.shell: >
-            kubectl get pod {{ ui_pod.stdout }} -n awx -o jsonpath='{.status.phase}'
+            kubectl get pod {{ ui_pod.stdout }} -n eda -o jsonpath='{.status.phase}'
           register: ui_status_retry
           retries: 10
           delay: 60
@@ -41,7 +41,7 @@
 
     - name: Retrieve EDA admin secret
       ansible.builtin.shell: >
-        kubectl -n awx get secret eda-admin-password -o go-template='{{'{{range $k,$v := .data}}{{printf "%s: " $k}}{{if not $v}}{{$v}}{{else}}{{$v | base64decode}}{{end}}{{"\\n"}}{{end}}'}}'
+        kubectl -n eda get secret eda-admin-password -o go-template='{{'{{range $k,$v := .data}}{{printf "%s: " $k}}{{if not $v}}{{$v}}{{else}}{{$v | base64decode}}{{end}}{{"\\n"}}{{end}}'}}'
       register: eda_admin_secret
       changed_when: false
       when: ui_status.stdout == "Succeeded" or ui_status.stdout == "Running"
