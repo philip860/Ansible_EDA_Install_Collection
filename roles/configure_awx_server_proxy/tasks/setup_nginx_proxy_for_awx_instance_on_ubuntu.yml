@@ -1,0 +1,143 @@
+- name: Reinstall k3s
+  ansible.builtin.shell: curl -sfL https://get.k3s.io | sudo bash -            
+  args:
+    executable: /bin/bash
+
+- name: Fix k3s Permissions
+  ansible.builtin.shell: chmod 644 /etc/rancher/k3s/k3s.yaml           
+  args:
+    executable: /bin/bash  
+
+- name: Fix k3s Directory Permissions
+  ansible.builtin.shell: "cp /etc/rancher/k3s/k3s.yaml ~/.kube/config  &&  chown $USER ~/.kube/config"
+  args:
+    executable: /bin/bash  
+
+
+- name: Create /admin_tools/helm Directory
+  ansible.builtin.file:
+    path: /admin_tools/helm
+    state: directory
+
+- name: Create /etc/nginx/certs/ Directory
+  ansible.builtin.file:
+    path: /etc/nginx/certs/
+    state: directory
+
+
+- name: Create /admin_tools/certs Directory
+  ansible.builtin.file:
+    path: /admin_tools/certs
+    state: directory
+
+- name: Install Packages
+  ansible.builtin.apt:
+    name: "{{ item }}"
+    state: latest
+  loop:
+    - nginx
+    - wget
+    - tar
+    - jq
+
+
+
+- name: Download Helm Binary
+  ansible.builtin.shell: wget https://get.helm.sh/helm-v3.15.3-linux-amd64.tar.gz && tar -xvf helm-v3.15.3-linux-amd64.tar.gz 
+  args:
+    executable: /bin/bash
+    chdir: /admin_tools/helm
+
+
+- name: Copy Helm Binary Over to /usr/bin
+  ansible.builtin.shell: cp -r linux-amd64/helm /usr/bin
+  args:
+    executable: /bin/bash
+    chdir: /admin_tools/helm
+
+- name: Remove file /var/lib/rancher/k3s/server/manifests/traefik.yaml
+  ansible.builtin.file: 
+    path: /var/lib/rancher/k3s/server/manifests/traefik.yaml
+    state: absent 
+
+- name: Uninstall Traefik Using Helm
+  ansible.builtin.shell: helm uninstall traefik traefik-crd -n kube-system
+  args:
+    executable: /bin/bash
+
+- name: Restart K3s service
+  ansible.builtin.systemd:
+    name: k3s
+    state: restarted
+
+
+
+- name: Copy Self Generate SSL Cert To /etc/nginx/certs directory
+  ansible.builtin.shell: cp -r /admin_tools/awx-operator/awx-deploy/tls.crt  /etc/nginx/certs/server.crt
+  args:
+    executable: /bin/bash
+
+
+- name: Copy Self Generate SSL Private Key To /etc/nginx/certs directory
+  ansible.builtin.shell: cp -r /admin_tools/awx-operator/awx-deploy/tls.key  /etc/nginx/certs/server.key
+  args:
+    executable: /bin/bash
+
+
+############################
+
+
+
+
+- name: Get AWX service NodePort
+  ansible.builtin.shell: "kubectl get service awx-service -n awx -o jsonpath='{.spec.ports[0].nodePort}'"
+  args:
+    executable: /bin/bash
+  register: awx_service_output
+
+- name: Print extracted service port
+  ansible.builtin.debug:
+     msg: "Extracted service port is {{ awx_service_output.stdout }}"
+
+
+- name: Set awx_service_port variable
+  set_fact:
+    awx_service_port: "{{ awx_service_output.stdout }}"
+
+
+
+
+- name: Copy Over Custom Nginx config_files to /etc/nginx/sites-available/awx-ssl.conf
+  ansible.builtin.template:
+    src: "{{ role_path }}/files/awx-ssl.conf"
+    dest: "/etc/nginx/sites-available/awx-ssl.conf"
+
+
+- name: Set symbolic link for /etc/nginx/sites-available/
+  ansible.builtin.shell: "ln -s /etc/nginx/sites-available/awx-ssl.conf /etc/nginx/sites-enabled/"
+  args:
+    executable: /bin/bash
+
+
+- name: Copy Over Custom awx-no-ssl-ubuntu.conf Nginx file to /etc/nginx/sites-available/default
+  ansible.builtin.copy:
+    src: "{{ role_path }}/files/awx-no-ssl-ubuntu.conf"
+    dest: "/etc/nginx/sites-available/default"
+
+
+
+
+
+- name: Restart Nginx
+  service:
+    name: nginx
+    state: restarted
+
+
+
+
+
+  
+
+
+
