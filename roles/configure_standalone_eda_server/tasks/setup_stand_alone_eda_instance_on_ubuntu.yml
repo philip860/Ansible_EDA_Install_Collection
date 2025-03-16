@@ -337,11 +337,13 @@
 
 
 
-- name: Get Admin Password For EDA Server
-  ansible.builtin.shell: kubectl get secret eda-admin-password -n eda -o jsonpath="{.data.password}" | base64 --decode ; echo
-  args: 
+- name: Disable UFW on Ubuntu
+  ansible.builtin.shell: |
+    systemctl stop ufw
+    systemctl disable ufw
+  args:
     executable: /bin/bash
-  register: eda_admin_password_output
+
 
 
 - name: Show Admin Password
