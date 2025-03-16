@@ -1,13 +1,25 @@
 
+- name: Create /etc/nginx/certs/ Directory
+  ansible.builtin.file:
+    path: /etc/nginx/certs/
+    state: directory
+
+
+- name: Create /admin_tools/certs Directory
+  ansible.builtin.file:
+    path: /admin_tools/certs
+    state: directory
+
+
 
 - name: Copy Self Generate SSL Cert To /etc/nginx/certs directory
-  ansible.builtin.shell: cp -r /admin_tools/awx-operator/awx-deploy/tls.crt  /etc/nginx/certs/server.crt
+  ansible.builtin.shell: cp -r /admin_tools/eda-operator/eda-deploy/tls.crt  /etc/nginx/certs/server.crt
   args:
     executable: /bin/bash
 
 
 - name: Copy Self Generate SSL Private Key To /etc/nginx/certs directory
-  ansible.builtin.shell: cp -r /admin_tools/awx-operator/awx-deploy/tls.key  /etc/nginx/certs/server.key
+  ansible.builtin.shell: cp -r /admin_tools/eda-operator/eda-deploy/tls.key  /etc/nginx/certs/server.key
   args:
     executable: /bin/bash
 
@@ -17,34 +29,34 @@
 
 
 
-- name: Get AWX service NodePort
-  ansible.builtin.shell: "kubectl get service awx-service -n awx -o jsonpath='{.spec.ports[0].nodePort}'"
+- name: Get EDA service NodePort
+  ansible.builtin.shell: "kubectl get service eda-service -n eda -o jsonpath='{.spec.ports[0].nodePort}'"
   args:
     executable: /bin/bash
-  register: awx_service_output
+  register: eda_service_output
 
 - name: Print extracted service port
   ansible.builtin.debug:
-     msg: "Extracted service port is {{ awx_service_output.stdout }}"
+     msg: "Extracted service port is {{ eda_service_output.stdout }}"
 
 
-- name: Set awx_service_port variable
+- name: Set eda_service_port variable
   set_fact:
-    awx_service_port: "{{ awx_service_output.stdout }}"
+    eda_service_port: "{{ eda_service_output.stdout }}"
 
 
 
 
-- name: Copy Over Custom Nginx config_files to /etc/nginx/conf.d/awx-ssl.conf
+- name: Copy Over Custom Nginx config_files to /etc/nginx/conf.d/eda-ssl.conf
   ansible.builtin.template:
-    src: "{{ role_path }}/files/awx-ssl.conf"
-    dest: "/etc/nginx/conf.d/awx-ssl.conf"
+    src: "{{ role_path }}/files/eda-ssl.conf"
+    dest: "/etc/nginx/conf.d/eda-ssl.conf"
 
 
-- name: Copy Over Custom Nginx config_files to /etc/nginx/conf.d/awx-no-ssl.conf
+- name: Copy Over Custom Nginx config_files to /etc/nginx/conf.d/eda-no-ssl.conf
   ansible.builtin.copy:
-    src: "{{ role_path }}/files/awx-no-ssl.conf"
-    dest: "/etc/nginx/conf.d/awx-no-ssl.conf"
+    src: "{{ role_path }}/files/eda-no-ssl.conf"
+    dest: "/etc/nginx/conf.d/eda-no-ssl.conf"
 
 
 - name: Set Nginx SELinux Rule

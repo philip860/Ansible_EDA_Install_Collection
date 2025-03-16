@@ -18,8 +18,8 @@
 
 
 
-- name: Get AWX service NodePort
-  ansible.builtin.shell: "kubectl get service eda-service -n awx -o jsonpath='{.spec.ports[0].nodePort}'"
+- name: Get EDA service NodePort
+  ansible.builtin.shell: "kubectl get service eda-service -n eda -o jsonpath='{.spec.ports[0].nodePort}'"
   args:
     executable: /bin/bash
   register: eda_service_output
