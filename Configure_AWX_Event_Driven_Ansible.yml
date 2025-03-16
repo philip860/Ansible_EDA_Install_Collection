@@ -31,6 +31,11 @@
       prompt: "Enter a password for local awx user to be created on system"
       private: no 
 
+
+    - name: ansible_aap_controller
+      prompt: "Enter the hostname of the Ansible AAP/AWX Controller Server"
+      private: no  
+
   roles:
   
     - install_required_packages
