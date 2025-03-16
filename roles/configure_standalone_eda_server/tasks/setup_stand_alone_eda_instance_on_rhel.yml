@@ -86,18 +86,6 @@
     executable: /bin/bash
 
 
-############## Certs Moved over from Self Signed Generation step, for nginx server
-- name: Need to Move Over TLS Cert From  /etc/letsencrypt directory
-  ansible.builtin.shell:  "cp -r /etc/letsencrypt/archive/{{ ansible_nodename }}/cert1.pem /etc/nginx/certs/server.crt" 
-  args:   
-    executable: /bin/bash
-
-- name: Need to Move Over TLS Private Key From  /etc/letsencrypt directory
-  ansible.builtin.shell:  "cp -r /etc/letsencrypt/archive/{{ ansible_nodename }}/privkey1.pem /etc/nginx/certs/server.key" 
-  args:
-    executable: /bin/bash
-
-
 
 - name: Configure Firewall Ports For Kubernetes
   ansible.posix.firewalld:
