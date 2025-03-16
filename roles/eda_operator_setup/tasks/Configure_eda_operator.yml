@@ -1,0 +1,41 @@
+- name: Set variable for /admin_tools/eda_awx_install_config directory
+  stat:
+    path: "/admin_tools/eda_awx_install_config"
+  register:  admin_tools_eda_awx_install_dir_check
+
+- name: Create the /admin_tools/eda_awx_install_config directory if it is not present
+  ansible.builtin.file:
+    path: "/admin_tools/eda_awx_install_config"
+    state: directory
+    mode: '0755'
+    recurse: yes
+  when: not admin_tools_eda_awx_install_dir_check.stat.exists == true
+  
+
+
+- name: Copy Over Custom eda-deploy files to /admin_tools/awx-operator
+  ansible.builtin.copy:
+    src: "{{ role_path }}/files/eda-deploy"
+    dest: "/admin_tools/eda_awx_install_config"
+  
+
+- name: "Entering  hostname {{ ansible_aap_controller  }} Into secret File"
+  replace:
+    path: "/admin_tools/eda_awx_install_config/eda-deploy/eda.yaml"
+    regexp: 'ansible_aap_controller '
+    replace: "{{  ansible_aap_controller  }}"
+
+
+- name: Download Kubernetes kustomize 
+  ansible.builtin.shell:  'curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh"  | bash'
+  args:
+    executable: /bin/bash
+    chdir: /admin_tools/eda_awx_install_config
+  ignore_errors: true
+
+- name: Install kustomize 
+  ansible.builtin.shell:  'install -o root -g root -m 0755 kustomize /usr/local/bin/kustomize && ln -s /usr/local/bin/kustomize /usr/bin/kustomize'
+  args:
+    executable: /bin/bash
+    chdir: /admin_tools/eda_awx_install_config  
+  ignore_errors: true
