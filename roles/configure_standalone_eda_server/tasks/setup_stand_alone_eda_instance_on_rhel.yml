@@ -39,38 +39,6 @@
   when: not admin_tools_dir_check.stat.exists == true
 
 
-- name: Copy Over eda-awx-no-ssl.conf to /etc/nginx/conf.d
-  ansible.builtin.template:
-    src: "{{ role_path }}/files/config_files/eda-awx-no-ssl.conf"
-    dest: "/etc/nginx/conf.d/"
-
-
-- name: Copy Over eda-awx-ssl.conf to /etc/nginx/conf.d
-  ansible.builtin.template:
-    src: "{{ role_path }}/files/config_files/eda-awx-ssl.conf"
-    dest: "/etc/nginx/conf.d/"
-
-- name: Copy Over eda-awx-ssl.conf to /etc/nginx/conf.d
-  ansible.builtin.template:
-    src: "{{ role_path }}/files/config_files/eda-awx-ssl.conf"
-    dest: "/admin_tools/eda_awx_install_config/eda-nginx-final-ssl.conf"
-
-
-- name: Copy Over eda-awx-ssl.conf to /etc/nginx/conf.d
-  ansible.builtin.template:
-    src: "{{ role_path }}/files/config_files/eda-awx-ssl.conf"
-    dest: "/admin_tools/eda_awx_install_config/eda-nginx-final-ssl.conf"
-
-
-
-- name: Copy Over set_proxy_IP_For_EDA_Server.sh to /admin_tools/eda_awx_install_config/
-  ansible.builtin.template:
-    src: "{{ role_path }}/files/config_files/set_proxy_IP_For_EDA_Server.sh"
-    dest: "/admin_tools/eda_awx_install_config/"   
-
-
-
-
 - name: Create Namespace for EDA Operator Pt.1
   ansible.builtin.shell:  export NAMESPACE=eda
   args:
