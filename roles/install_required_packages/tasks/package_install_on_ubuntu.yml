@@ -5,7 +5,7 @@
     name: "*"
     state: latest
 
-- name: Install the Necessary Packages required to run AWX Server
+- name: Install the Necessary Packages required to run EDA Server
   ansible.builtin.apt:
     name:
       - curl
