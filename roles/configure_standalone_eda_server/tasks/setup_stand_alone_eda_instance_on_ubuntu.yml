@@ -10,9 +10,6 @@
     - jq
 
 
-
-
-
 - name: Set variable for ITS tools directory
   stat:
     path: "/admin_tools"
@@ -26,6 +23,12 @@
     recurse: yes
   when: not admin_tools_dir_check.stat.exists == true
 
+
+
+- name: Copy Over Custom config_files to /admin_tools/eda-operator
+  ansible.builtin.copy:
+    src: "{{ role_path }}/files/config_files"
+    dest: "/admin_tools/eda-operator"
 
 
 

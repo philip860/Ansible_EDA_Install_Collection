@@ -10,6 +10,7 @@
     state: present 
 
 
+
 - name: Set SELinux Context For Nginx
   ansible.builtin.shell:  setsebool -P httpd_can_network_connect 1
   args:
@@ -37,6 +38,14 @@
     mode: '0755'
     recurse: yes
   when: not admin_tools_dir_check.stat.exists == true
+
+
+
+- name: Copy Over Custom config_files to /admin_tools/eda-operator
+  ansible.builtin.copy:
+    src: "{{ role_path }}/files/config_files"
+    dest: "/admin_tools/eda-operator"
+
 
 
 - name: Create Namespace for EDA Operator Pt.1
