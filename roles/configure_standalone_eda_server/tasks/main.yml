@@ -8,5 +8,5 @@
 
 - name: Include setup_stand_alone_eda_instance_on_rhel.yml File - ( Ubuntu Install )
   ansible.builtin.include_tasks:
-    file: setup_stand_alone_eda_instance_on_rhel.yml
+    file: setup_stand_alone_eda_instance_on_ubuntu.yml
   when: ('Ubuntu' in ansible_distribution )

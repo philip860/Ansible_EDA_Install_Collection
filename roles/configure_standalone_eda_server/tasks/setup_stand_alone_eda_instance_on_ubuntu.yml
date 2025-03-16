@@ -1,0 +1,369 @@
+
+- name: Install nginx
+  ansible.builtin.yum:
+    name: nginx
+    state: present 
+
+- name: Install wget
+  ansible.builtin.yum:
+    name: wget
+    state: present 
+
+
+- name: Set SELinux Context For Nginx
+  ansible.builtin.shell:  setsebool -P httpd_can_network_connect 1
+  args:
+    executable: /bin/bash
+
+
+- name: Permit traffic in default zone on port 5432/tcp For External Postgres Server
+  ansible.posix.firewalld:
+    port: 5432/tcp
+    permanent: yes
+    immediate: yes
+    state: enabled
+
+
+
+- name: Set variable for ITS tools directory
+  stat:
+    path: "/admin_tools"
+  register:  admin_tools_dir_check
+
+- name: Create the ITS_tools directory if it is not present
+  ansible.builtin.file:
+    path: "/admin_tools"
+    state: directory
+    mode: '0755'
+    recurse: yes
+  when: not admin_tools_dir_check.stat.exists == true
+
+
+- name: Copy Over eda-awx-no-ssl.conf to /etc/nginx/conf.d
+  ansible.builtin.template:
+    src: "{{ role_path }}/files/config_files/eda-awx-no-ssl.conf"
+    dest: "/etc/nginx/conf.d/"
+
+
+- name: Copy Over eda-awx-ssl.conf to /etc/nginx/conf.d
+  ansible.builtin.template:
+    src: "{{ role_path }}/files/config_files/eda-awx-ssl.conf"
+    dest: "/etc/nginx/conf.d/"
+
+- name: Copy Over eda-awx-ssl.conf to /etc/nginx/conf.d
+  ansible.builtin.template:
+    src: "{{ role_path }}/files/config_files/eda-awx-ssl.conf"
+    dest: "/admin_tools/eda_awx_install_config/eda-nginx-final-ssl.conf"
+
+
+- name: Copy Over eda-awx-ssl.conf to /etc/nginx/conf.d
+  ansible.builtin.template:
+    src: "{{ role_path }}/files/config_files/eda-awx-ssl.conf"
+    dest: "/admin_tools/eda_awx_install_config/eda-nginx-final-ssl.conf"
+
+
+
+- name: Copy Over set_proxy_IP_For_EDA_Server.sh to /admin_tools/eda_awx_install_config/
+  ansible.builtin.template:
+    src: "{{ role_path }}/files/config_files/set_proxy_IP_For_EDA_Server.sh"
+    dest: "/admin_tools/eda_awx_install_config/"   
+
+
+
+
+- name: Create Namespace for EDA Operator Pt.1
+  ansible.builtin.shell:  export NAMESPACE=eda
+  args:
+    executable: /bin/bash
+
+- name: Create Namespace for EDA Operator Pt.2
+  ansible.builtin.shell:  /usr/local/bin/kubectl  create ns eda
+  args:
+    executable: /bin/bash
+  ignore_errors: true
+
+- name: Create Namespace for EDA Operator Pt.3
+  ansible.builtin.shell:  /usr/local/bin/kubectl  config set-context --current --namespace=eda
+  args:
+    executable: /bin/bash
+  ignore_errors: true
+
+
+
+- name: Create Required Nginx Directories
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: nginx
+    group: nginx
+    mode: 0775
+  loop:
+    - /etc/nginx/certs
+
+# - name: Set /data/projects Directory Permissions
+#   ansible.builtin.shell: chown 1000:0 /var/lib/awx/projects
+#   args:
+#     executable: /bin/bash
+
+
+
+- name: Need to Move Over TLS Cert From  /etc/letsencrypt directory
+  ansible.builtin.shell:  "cp -r /etc/letsencrypt/archive/{{ ansible_nodename }}/cert1.pem /admin_tools/eda_awx_install_config/eda-deploy/tls.crt" 
+  args:
+    executable: /bin/bash
+
+- name: Need to Move Over TLS Private Key From  /etc/letsencrypt directory
+  ansible.builtin.shell:  "cp -r /etc/letsencrypt/archive/{{ ansible_nodename }}/privkey1.pem /admin_tools/eda_awx_install_config/eda-deploy/tls.key" 
+  args:
+    executable: /bin/bash
+
+
+############## Certs Moved over from Self Signed Generation step, for nginx server
+- name: Need to Move Over TLS Cert From  /etc/letsencrypt directory
+  ansible.builtin.shell:  "cp -r /etc/letsencrypt/archive/{{ ansible_nodename }}/cert1.pem /etc/nginx/certs/server.crt" 
+  args:   
+    executable: /bin/bash
+
+- name: Need to Move Over TLS Private Key From  /etc/letsencrypt directory
+  ansible.builtin.shell:  "cp -r /etc/letsencrypt/archive/{{ ansible_nodename }}/privkey1.pem /etc/nginx/certs/server.key" 
+  args:
+    executable: /bin/bash
+
+
+
+- name: Configure Firewall Ports For Kubernetes
+  ansible.posix.firewalld:
+    port: "{{ item }}/tcp"
+    permanent: true
+    state: enabled
+    immediate: true
+  loop:
+    - 8443
+    - 8080
+    - 10250
+    - 10248
+    - 2379-2380
+    - 10259
+    - 10255
+    - 6443
+    - 51820
+    - 5432
+    - 443
+    - 80 
+
+#For Pods
+- name: Configure Firewall K3s Source Network-1
+  ansible.posix.firewalld:
+    source: 10.42.0.0/16
+    zone: trusted
+    state: enabled
+    permanent: true
+    immediate: true
+
+#For services
+- name: Configure Firewall K3s Source Network-2
+  ansible.posix.firewalld:
+    source: 10.43.0.0/16
+    zone: trusted
+    state: enabled
+    permanent: true
+    immediate: true
+
+
+#### Need to re-arrange the kustomize.yaml file Location
+- name: Create the /admin_tools/eda_awx_install_config/kustomize_config Directory
+  ansible.builtin.file:
+    path: "/admin_tools/eda_awx_install_config/kustomize_config/"
+    state: directory
+    mode: '0755'
+    recurse: yes
+
+- name: Move kustomization.yaml File to /admin_tools/eda_awx_install_config/kustomize_config Directory
+  ansible.builtin.shell: mv kustomization.yaml /admin_tools/eda_awx_install_config/kustomize_config/kustomization.yaml
+  args:
+    executable: /bin/bash
+    chdir: /admin_tools/eda_awx_install_config/eda-deploy
+
+
+- name: Run kustomize to install eda operator 
+  ansible.builtin.shell: /usr/local/bin/kustomize build . | kubectl apply -f -
+  args:
+    executable: /bin/bash
+    chdir: /admin_tools/eda_awx_install_config/kustomize_config
+    
+- name: Apply EDA Server Config
+  ansible.builtin.shell: /usr/local/bin/kubectl apply  -f eda.yaml -n eda
+  args:
+    executable: /bin/bash
+    chdir: /admin_tools/eda_awx_install_config/eda-deploy
+     
+    
+- name: Enable masquerade for Public Zone for http service
+  ansible.posix.firewalld:
+    masquerade: yes
+    state: enabled
+    permanent: yes
+    immediate: yes
+    zone: public
+
+
+####### There seems to be a bug with the sleep package, any times longer than 60s seem to freeze the terminal
+- name: Waiting 1 Minute For Pods To Initialize - Pt.1
+  ansible.builtin.shell:  /bin/sleep 60
+  args:
+    executable: /bin/bash
+
+
+- name: Waiting 1 Minute For Pods To Initialize - Pt.2
+  ansible.builtin.shell:  /bin/sleep 60
+  args:
+    executable: /bin/bash
+
+
+- name: Waiting 1 Minute For Pods To Initialize - Pt.3
+  ansible.builtin.shell:  /bin/sleep 60
+  args:
+    executable: /bin/bash
+
+- name: Create a EDA user
+  user:
+   name: eda
+   password: "{{ awx_user_password_var | password_hash('sha512') }}"
+   state: present
+   shell: /bin/bash
+   system: no
+   createhome: yes
+   home: /home/eda
+
+
+
+- name: Export eda NameSpace To EDA User Bash Profile
+  become: true
+  become_user: eda
+  ansible.builtin.shell: echo 'export NAMESPACE=eda' >>  ~/.bashrc
+  args:
+    executable: /bin/bash
+
+
+
+- name: Get EDA Service Status
+  ansible.builtin.shell:  kubectl get service -n eda | grep 'eda-ui'
+  args:
+    executable: /bin/bash
+  register: eda_service_status_output
+
+
+- name: Print eda_service_status_output
+  ansible.builtin.debug:
+    msg: "{{ eda_service_status_output.stdout }}"
+
+
+- name: Extract ClusterIP using regex
+  set_fact:
+    cluster_ip: "{{ eda_service_status_output.stdout | regex_search('ClusterIP\\s+(\\S+)', '\\1') }}"
+
+
+- name: Print cluster_ip
+  ansible.builtin.debug:
+    msg: "{{ cluster_ip }}"
+
+
+
+
+##### Uninstalling traefik here
+- name: Create the /admin_tools/eda_awx_install_config/helm if it is not present
+  ansible.builtin.file:
+    path: "/admin_tools/eda_awx_install_config/helm"
+    state: directory
+    mode: '0755'
+
+
+
+- name: Re-configure Kubernetes Cluster Settings - Pt.1
+  ansible.builtin.shell: mkdir ~/.kube
+  args:
+    executable: /bin/bash
+  ignore_errors: true
+
+- name: Re-configure Kubernetes Cluster Settings - Pt.2
+  ansible.builtin.shell: sudo cp /etc/rancher/k3s/k3s.yaml ~/.kube/config && sudo chown $USER ~/.kube/config && chmod +x /usr/local/bin/kubectl
+  args:
+    executable: /bin/bash
+
+- name: Re-configure Kubernetes Cluster Settings - Pt.3
+  ansible.builtin.shell: ln -s /usr/local/bin/kubectl /usr/bin/kubectl
+  args:
+    executable: /bin/bash
+  ignore_errors: true
+
+
+- name: Download helm package
+  ansible.builtin.shell: wget https://get.helm.sh/helm-v3.15.3-linux-amd64.tar.gz
+  args:
+    executable: /bin/bash
+    chdir: /admin_tools/eda_awx_install_config/helm 
+
+
+- name: Install helm package
+  ansible.builtin.shell: tar -xvf helm-v3.15.3-linux-amd64.tar.gz && cp -r linux-amd64/helm /usr/bin
+  args:
+    executable: /bin/bash
+    chdir: /admin_tools/eda_awx_install_config/helm 
+
+
+- name: Remove traefik File
+  ansible.builtin.shell: 	rm -rf /var/lib/rancher/k3s/server/manifests/traefik.yaml
+  args:
+    executable: /bin/bash
+
+- name: Uninstall traefik File
+  ansible.builtin.shell: helm uninstall traefik traefik-crd -n kube-system
+  args:
+    executable: /bin/bash
+
+
+- name: Re-Start K3s Service
+  ansible.builtin.systemd:
+    name: k3s
+    state: restarted
+    enabled: true 
+
+
+- name: Remove brackets and quotes from cluster_ip
+  set_fact:
+    cluster_ip_var: "{{ cluster_ip | regex_replace('\\[', '') | regex_replace('\\]', '') | replace(\"'\",'')  | replace(\"'\",'') }}"
+
+
+##### Need to replace the proxy IP address in the nginx config
+- name: Entering a awx_admin_username Into secret File
+  replace:
+    path: "/etc/nginx/conf.d/eda-awx-ssl.conf"
+    regexp: 'eda-server'
+    replace: "{{ cluster_ip_var }}"
+
+
+- name: Start Nginx Reverse Proxy Server
+  ansible.builtin.systemd:
+    name: nginx
+    state: started
+    enabled: true 
+
+#Seems to be an issue with k3s running EDA with firewalld enabled
+- name: Disable Firewalld
+  ansible.builtin.shell: systemctl stop firewalld && systemctl disable firewalld
+  args:
+    executable: /bin/bash
+
+
+
+
+- name: Get Admin Password For EDA Server
+  ansible.builtin.shell: kubectl get secret eda-admin-password -n eda -o jsonpath="{.data.password}" | base64 --decode ; echo
+  args: 
+    executable: /bin/bash
+  register: eda_admin_password_output
+
+
+- name: Show Admin Password
+  ansible.builtin.debug:
+    msg: "Login Password: {{ eda_admin_password_output.stdout }}"
