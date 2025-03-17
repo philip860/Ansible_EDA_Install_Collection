@@ -1,4 +1,5 @@
 
+
 - name: Create /etc/nginx/certs/ Directory
   ansible.builtin.file:
     path: /etc/nginx/certs/
@@ -12,16 +13,19 @@
 
 
 
+
 - name: Copy Self Generate SSL Cert To /etc/nginx/certs directory
-  ansible.builtin.shell: cp -r /admin_tools/eda-operator/eda-deploy/tls.crt  /etc/nginx/certs/server.crt
+  ansible.builtin.shell: "cp -r /etc/letsencrypt/archive/{{ ansible_nodename }}/cert1.pem /etc/nginx/certs/server.crt"
   args:
     executable: /bin/bash
 
 
 - name: Copy Self Generate SSL Private Key To /etc/nginx/certs directory
-  ansible.builtin.shell: cp -r /admin_tools/eda-operator/eda-deploy/tls.key  /etc/nginx/certs/server.key
+  ansible.builtin.shell: "cp -r /etc/letsencrypt/archive/{{ ansible_nodename }}/privkey1.pem /etc/nginx/certs/server.key"
   args:
     executable: /bin/bash
+
+
 
 
 ############################
