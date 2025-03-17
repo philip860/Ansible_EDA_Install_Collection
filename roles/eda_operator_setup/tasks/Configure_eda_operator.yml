@@ -34,13 +34,10 @@
 #   ignore_errors: true
 
 
-- name: Download Kubernetes kustomize 
-  ansible.builtin.shell:  'curl -Lo kustomize "https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize/v5.0.4/kustomize_v5.0.4_linux_amd64"'
-  args:
-    executable: /bin/bash
-    chdir: /admin_tools/eda_awx_install_config
-  ignore_errors: true
-
+# - name: Copy Over Custom eda-deploy files to /admin_tools/awx-operator
+#   ansible.builtin.copy:
+#     src: "{{ role_path }}/files/eda-deploy/kustomize"
+#     dest: "/admin_tools/eda_awx_install_config"
 
 
 - name: Install kustomize 
