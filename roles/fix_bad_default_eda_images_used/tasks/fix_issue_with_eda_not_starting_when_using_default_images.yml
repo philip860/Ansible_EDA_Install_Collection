@@ -29,7 +29,7 @@
   ansible.builtin.shell: "podman pull quay.io/philip860/{{ item }}"
   args:
     chdir: /admin_tools/eda_awx_install_config/quay_io_repo_images
-    executable: /bin /bin/bash
+    executable: /bin/bash
   loop:
     - eda-server-operator:main
     - eda-server:main
