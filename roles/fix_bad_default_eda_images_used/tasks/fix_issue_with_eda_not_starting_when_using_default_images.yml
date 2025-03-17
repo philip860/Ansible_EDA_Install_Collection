@@ -2,6 +2,20 @@
 
 
 
+- name: Create k3s Symbolic Link
+  ansible.builtin.file: 
+    src: "/usr/local/bin/k3s"
+    dest: '/usr/bin/k3s'
+    state: link
+    
+
+- name: Create ctr Symbolic Link
+  ansible.builtin.file: 
+    src: "/usr/local/bin/ctr"
+    dest: '/usr/bin/ctr'
+    state: link
+
+
 - name: Create the /admin_tools/eda_awx_install_config/quay_io_repo_images Directory if it is not present
   ansible.builtin.file:
     path: "/admin_tools/eda_awx_install_config/quay_io_repo_images"
