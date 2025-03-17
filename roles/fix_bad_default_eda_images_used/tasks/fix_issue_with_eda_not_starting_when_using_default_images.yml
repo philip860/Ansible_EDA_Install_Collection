@@ -65,7 +65,7 @@
   loop: "{{ expected_images.keys() }}"
   when: item in image_id_map
 
-  
+
 - name: Run podman tag with dynamically mapped IDs
   command: podman tag {{ item.id }} {{ item.new_repo }}
   loop: "{{ tag_mappings }}"
@@ -98,6 +98,10 @@
     - postgresql-15.tar
     - redis-6.tar
 
+- name: Restart K3s Service
+  ansible.builtin.systemd:
+    name: k3s
+    state: restarted
 
 - name: Delete ALL the current EDA Pods to force the deployment to use the Newly Updated Images
   ansible.builtin.shell: "kubectl delete pods --all -n eda"
