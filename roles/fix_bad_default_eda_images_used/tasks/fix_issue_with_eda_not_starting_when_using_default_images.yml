@@ -24,3 +24,34 @@
     - redis-6-c9s:c9s
 
 
+- name: Get list of Podman images
+  command: podman images --format "{{'{{.ID}}'}} {{'{{.Repository}}:{{.Tag}}'}}"
+  register: podman_images
+  changed_when: false
+
+- name: Filter quay.io images
+  set_fact:
+    quay_images: "{{ podman_images.stdout_lines | select('search', '^.* quay.io/') | list }}"
+
+- name: Extract image IDs and repositories
+  set_fact:
+    image_mappings: "{{ quay_images | map('split', ' ') | list }}"
+
+- name: Run podman tag for quay.io images
+  command: podman tag {{ item[0] }} {{ item[1] }}
+  loop: "{{ image_mappings }}"
+  when: item[0] is defined and item[1] is defined
+
+
+
+- name: Save the newly tagged quay.io eda Images In quay_io_repo_images Directory
+  ansible.builtin.shell: "podman pull quay.io/philip860/{{ item }}"
+  args:
+    chdir:
+    executable: /bin /bin/bash
+  loop:
+    - podman save -o eda-server-operator.tar quay.io/ansible/eda-server-operator:main
+    - podman save -o eda-server.tar quay.io/ansible/eda-server:main
+    - podman save -o eda-ui.tar quay.io/ansible/eda-ui:main
+    - podman save -o postgresql-15.tar quay.io/sclorg/postgresql-15-c9s:latest
+    - podman save -o redis-6.tar quay.io/sclorg/redis-6-c9s:c9s
