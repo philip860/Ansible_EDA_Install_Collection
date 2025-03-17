@@ -64,11 +64,11 @@
     chdir: /admin_tools/eda_awx_install_config/quay_io_repo_images
     executable: /bin/bash
   loop:
-    - podman save -o eda-server-operator.tar quay.io/philip860/eda-server-operator:main
-    - podman save -o eda-server.tar quay.io/philip860/eda-server:main
-    - podman save -o eda-ui.tar quay.io/philip860/eda-ui:main
-    - podman save -o postgresql-15.tar quay.io/philip860/postgresql-15-c9s:latest
-    - podman save -o redis-6.tar quay.io/philip860/redis-6-c9s:c9s
+    - podman save -o eda-server-operator.tar quay.io/ansible/eda-server-operator:main
+    - podman save -o eda-server.tar quay.io/ansible/eda-server:main
+    - podman save -o eda-ui.tar quay.io/ansible/eda-ui:main
+    - podman save -o postgresql-15.tar quay.io/sclorg/postgresql-15-c9s:latest
+    - podman save -o redis-6.tar quay.io/sclorg/redis-6-c9s:c9s
 
 
 
