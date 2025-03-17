@@ -1,88 +1,88 @@
-# ---
+---
 
 
 
-# - name: Create k3s Symbolic Link
-#   ansible.builtin.file: 
-#     src: "/usr/local/bin/k3s"
-#     dest: '/usr/bin/k3s'
-#     state: link
+- name: Create k3s Symbolic Link
+  ansible.builtin.file: 
+    src: "/usr/local/bin/k3s"
+    dest: '/usr/bin/k3s'
+    state: link
     
 
-# - name: Create ctr Symbolic Link
-#   ansible.builtin.file: 
-#     src: "/usr/local/bin/ctr"
-#     dest: '/usr/bin/ctr'
-#     state: link
+- name: Create ctr Symbolic Link
+  ansible.builtin.file: 
+    src: "/usr/local/bin/ctr"
+    dest: '/usr/bin/ctr'
+    state: link
 
 
-# - name: Create the /admin_tools/eda_awx_install_config/quay_io_repo_images Directory if it is not present
-#   ansible.builtin.file:
-#     path: "/admin_tools/eda_awx_install_config/quay_io_repo_images"
-#     state: directory
-#     mode: '0755'
-#     recurse: yes
-
-
-
-# - name: Pull the quay.io eda Images That Are Working
-#   ansible.builtin.shell: "podman pull quay.io/philip860/{{ item }}"
-#   args:
-#     chdir: /admin_tools/eda_awx_install_config/quay_io_repo_images
-#     executable: /bin/bash
-#   loop:
-#     - eda-server-operator:main
-#     - eda-server:main
-#     - eda-ui:main
-#     - postgresql-15-c9s:latest
-#     - redis-6-c9s:c9s
-
-
-# - name: Get list of Podman images
-#   command: podman images --format "{{'{{.ID}}'}} {{'{{.Repository}}:{{.Tag}}'}}"
-#   register: podman_images
-#   changed_when: false
-
-# - name: Filter quay.io images
-#   set_fact:
-#     quay_images: "{{ podman_images.stdout_lines | select('search', '^.* quay.io/') | list }}"
-
-# - name: Extract image IDs and repositories
-#   set_fact:
-#     image_mappings: "{{ quay_images | map('split', ' ') | list }}"
-
-# - name: Run podman tag for quay.io images
-#   command: podman tag {{ item[0] }} {{ item[1] }}
-#   loop: "{{ image_mappings }}"
-#   when: item[0] is defined and item[1] is defined
+- name: Create the /admin_tools/eda_awx_install_config/quay_io_repo_images Directory if it is not present
+  ansible.builtin.file:
+    path: "/admin_tools/eda_awx_install_config/quay_io_repo_images"
+    state: directory
+    mode: '0755'
+    recurse: yes
 
 
 
-# - name: Save the newly tagged quay.io eda Images In quay_io_repo_images Directory
-#   ansible.builtin.shell: "{{ item }}"
-#   args:
-#     chdir: /admin_tools/eda_awx_install_config/quay_io_repo_images
-#     executable: /bin/bash
-#   loop:
-#     - podman save -o eda-server-operator.tar quay.io/philip860/eda-server-operator:main
-#     - podman save -o eda-server.tar quay.io/philip860/eda-server:main
-#     - podman save -o eda-ui.tar quay.io/philip860/eda-ui:main
-#     - podman save -o postgresql-15.tar quay.io/philip860/postgresql-15-c9s:latest
-#     - podman save -o redis-6.tar quay.io/philip860/redis-6-c9s:c9s
+- name: Pull the quay.io eda Images That Are Working
+  ansible.builtin.shell: "podman pull quay.io/philip860/{{ item }}"
+  args:
+    chdir: /admin_tools/eda_awx_install_config/quay_io_repo_images
+    executable: /bin/bash
+  loop:
+    - eda-server-operator:main
+    - eda-server:main
+    - eda-ui:main
+    - postgresql-15-c9s:latest
+    - redis-6-c9s:c9s
+
+
+- name: Get list of Podman images
+  command: podman images --format "{{'{{.ID}}'}} {{'{{.Repository}}:{{.Tag}}'}}"
+  register: podman_images
+  changed_when: false
+
+- name: Filter quay.io images
+  set_fact:
+    quay_images: "{{ podman_images.stdout_lines | select('search', '^.* quay.io/') | list }}"
+
+- name: Extract image IDs and repositories
+  set_fact:
+    image_mappings: "{{ quay_images | map('split', ' ') | list }}"
+
+- name: Run podman tag for quay.io images
+  command: podman tag {{ item[0] }} {{ item[1] }}
+  loop: "{{ image_mappings }}"
+  when: item[0] is defined and item[1] is defined
 
 
 
-# - name: Transfter Saved Podman Images To K3s
-#   ansible.builtin.shell: "ctr -n k8s.io images import {{ item }}"
-#   args: 
-#     chdir: /admin_tools/eda_awx_install_config/quay_io_repo_images
-#     executable: /bin/bash
-#   loop:
-#     - eda-server-operator.tar
-#     - eda-server.tar
-#     - eda-ui.tar
-#     - postgresql-15.tar
-#     - redis-6.tar
+- name: Save the newly tagged quay.io eda Images In quay_io_repo_images Directory
+  ansible.builtin.shell: "{{ item }}"
+  args:
+    chdir: /admin_tools/eda_awx_install_config/quay_io_repo_images
+    executable: /bin/bash
+  loop:
+    - podman save -o eda-server-operator.tar quay.io/philip860/eda-server-operator:main
+    - podman save -o eda-server.tar quay.io/philip860/eda-server:main
+    - podman save -o eda-ui.tar quay.io/philip860/eda-ui:main
+    - podman save -o postgresql-15.tar quay.io/philip860/postgresql-15-c9s:latest
+    - podman save -o redis-6.tar quay.io/philip860/redis-6-c9s:c9s
+
+
+
+- name: Transfter Saved Podman Images To K3s
+  ansible.builtin.shell: "ctr -n k8s.io images import {{ item }}"
+  args: 
+    chdir: /admin_tools/eda_awx_install_config/quay_io_repo_images
+    executable: /bin/bash
+  loop:
+    - eda-server-operator.tar
+    - eda-server.tar
+    - eda-ui.tar
+    - postgresql-15.tar
+    - redis-6.tar
 
 
 - name: Delete ALL the current EDA Pods to force the deployment to use the Newly Updated Images
