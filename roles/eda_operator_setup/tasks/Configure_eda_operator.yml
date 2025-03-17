@@ -35,7 +35,7 @@
 
 
 - name: Download Kubernetes kustomize 
-  ansible.builtin.shell:  'curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh"  | bash'
+  ansible.builtin.shell:  'curl -Lo kustomize "https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize/v5.0.4/kustomize_v5.0.4_linux_amd64"'
   args:
     executable: /bin/bash
     chdir: /admin_tools/eda_awx_install_config
