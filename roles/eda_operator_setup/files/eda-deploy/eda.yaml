@@ -4,6 +4,6 @@ metadata:
   name: eda
   namespace: eda
 spec:
-  service_type: nodeport
   automation_server_url: https://ansible_aap_controller 
+  service_type: nodeport
 
