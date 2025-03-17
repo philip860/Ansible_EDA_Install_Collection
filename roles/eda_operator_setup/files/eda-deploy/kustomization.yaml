@@ -5,7 +5,7 @@ resources:
 
 images:
   - name: quay.io/ansible/eda-server-operator
-    newTag: main
+    newTag: 0.0.1
 
 # Specify a custom namespace in which to install EDA
 namespace: eda
