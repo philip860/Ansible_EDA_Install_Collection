@@ -61,8 +61,8 @@
 - name: Save the newly tagged quay.io eda Images In quay_io_repo_images Directory
   ansible.builtin.shell: "{{ item }}"
   args:
-    chdir:
-    executable: /bin /bin/bash
+    chdir: /admin_tools/eda_awx_install_config/quay_io_repo_images
+    executable: /bin/bash
   loop:
     - podman save -o eda-server-operator.tar quay.io/ansible/eda-server-operator:main
     - podman save -o eda-server.tar quay.io/ansible/eda-server:main
@@ -74,8 +74,8 @@
 
 - name: Save the newly tagged quay.io eda Images In quay_io_repo_images Directory
   ansible.builtin.shell: "ctr -n k8s.io images import {{ item }}"
-  args:
-    chdir:
+  args: 
+    chdir: /admin_tools/eda_awx_install_config/quay_io_repo_images
     executable: /bin /bin/bash
   loop:
     - eda-server-operator.tar
@@ -88,5 +88,4 @@
 - name: Delete ALL the current EDA Pods to force the deployment to use the Newly Updated Images
   ansible.builtin.shell: "kubectl delete pods --all -n eda"
   args:
-    chdir:
     executable: /bin /bin/bash
