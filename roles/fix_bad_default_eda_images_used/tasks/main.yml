@@ -1,0 +1,5 @@
+---
+
+- name: Include fix_issue_with_eda_not_starting_when_using_default_images.yml File
+  ansible.builtin.include_tasks:
+    file: fix_issue_with_eda_not_starting_when_using_default_images.yml

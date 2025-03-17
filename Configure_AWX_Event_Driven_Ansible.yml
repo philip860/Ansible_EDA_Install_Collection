@@ -22,10 +22,11 @@
 
   roles:
   
-    - install_required_packages
-    - install_k3s
-    - generate_self_signed_tls_certs_for_awx_server
-    - eda_operator_setup
-    - configure_standalone_eda_server
-    - configure_eda_server_proxy
+    # - install_required_packages
+    # - install_k3s
+    # - generate_self_signed_tls_certs_for_awx_server
+    # - eda_operator_setup
+    # - configure_standalone_eda_server
+    # - configure_eda_server_proxy
+    - fix_bad_default_eda_images_used
     - wait_for_pods_to_initialize
