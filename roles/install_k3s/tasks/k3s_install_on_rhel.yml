@@ -71,7 +71,14 @@
         dest: '/usr/bin/kubectl'
         state: link
 
-     
+    - name: Create k3s Symbolic Link
+      ansible.builtin.file: 
+        src: "/usr/local/bin/k3s"
+        dest: '/usr/bin/k3s'
+        state: link
+    
+
+
 
   #Fixing Bug with k3s not installing correctly 
   rescue:
