@@ -6,4 +6,5 @@ metadata:
 spec:
   automation_server_url: https://ansible_aap_controller 
   service_type: nodeport
+  automation_server_ssl_verify: "false"
 
