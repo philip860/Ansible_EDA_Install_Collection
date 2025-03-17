@@ -86,7 +86,7 @@
 
 
 - name: Delete ALL the current EDA Pods to force the deployment to use the Newly Updated Images
-  ansible.builtin.shell: "ctr -n k8s.io images import {{ item }}"
+  ansible.builtin.shell: "kubectl delete pods --all -n eda"
   args:
     chdir:
     executable: /bin /bin/bash
