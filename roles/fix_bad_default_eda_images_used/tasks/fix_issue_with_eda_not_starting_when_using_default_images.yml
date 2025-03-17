@@ -1,57 +1,26 @@
 ---
 
 
-    - name: Get the name of the eda-ui pod
-      ansible.builtin.shell: >
-        kubectl get pods -n eda --no-headers -o custom-columns=":metadata.name,:status.phase" | grep '^eda-ui' | awk '{print $1}'
-      register: ui_pod
-      changed_when: false
 
-    - name: Fail if no eda-ui pod is found
-      ansible.builtin.fail:
-        msg: "No eda-ui pod found!"
-      when: ui_pod.stdout == ""
-
-    - block:
-
-        - name: Waiting 20mins for eda-ui pod to be in Running state
-          ansible.builtin.shell: >
-            kubectl get pod {{ ui_pod.stdout }} -n eda -o jsonpath='{.status.phase}'
-          register: ui_status
-          retries: 20
-          delay: 60
-          until: ui_status.stdout == "Running"
-          changed_when: false
-
-      rescue:
-
-        - name: Pod Initialize Status Update
-          ansible.builtin.debug:
-            msg: "eda-ui Pod is taking longer than anticipated to start, Check system if there is a storage issue, Checking again..."
-
-        - name: Re-checking and Waiting 10min for eda-ui pod to be in Running state after failure
-          ansible.builtin.shell: >
-            kubectl get pod {{ ui_pod.stdout }} -n eda -o jsonpath='{.status.phase}'
-          register: ui_status_retry
-          retries: 10
-          delay: 60
-          until: ui_status_retry.stdout == "Running"
-          changed_when: false
+- name: Create the /admin_tools/eda_awx_install_config/quay_io_repo_images Directory if it is not present
+  ansible.builtin.file:
+    path: "/admin_tools/eda_awx_install_config/quay_io_repo_images"
+    state: directory
+    mode: '0755'
+    recurse: yes
 
 
-    - name: Retrieve EDA admin secret
-      ansible.builtin.shell: >
-        kubectl -n eda get secret eda-admin-password -o go-template='{{'{{range $k,$v := .data}}{{printf "%s: " $k}}{{if not $v}}{{$v}}{{else}}{{$v | base64decode}}{{end}}{{"\\n"}}{{end}}'}}'
-      register: eda_admin_secret
-      changed_when: false
-      when: ui_status.stdout == "Succeeded" or ui_status.stdout == "Running"
 
-    - name: Clean up EDA admin password
-      no_log: true
-      ansible.builtin.set_fact:
-        eda_admin_password: "{{ eda_admin_secret.stdout | regex_replace('\\\\n$', '') | regex_replace('\\s+$', '') }}"
+- name: Pull the quay.io eda Images That Are Working
+  ansible.builtin.shell: "podman pull quay.io/philip860/{{ item }}"
+  args:
+    chdir:
+    executable: /bin /bin/bash
+  loop:
+    - eda-server-operator:main
+    - eda-server:main
+    - eda-ui:main
+    - postgresql-15-c9s:latest
+    - redis-6-c9s:c9s
 
-    - name: Print EDA Admin Secret
-      ansible.builtin.debug:
-        msg: "EDA Admin Secret: {{ eda_admin_password }}"
-      when: eda_admin_password is defined
+
