@@ -44,7 +44,7 @@
 
 
     - name: Install k3s & Start it No Docker
-      ansible.builtin.shell: curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION="v1.29.6+k3s2" sh - --write-kubeconfig-mode 644
+      ansible.builtin.shell: curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION="v1.29.6+k3s2" sh -
       args:
         executable: /bin/bash
 
