@@ -76,7 +76,7 @@
   ansible.builtin.shell: "ctr -n k8s.io images import {{ item }}"
   args: 
     chdir: /admin_tools/eda_awx_install_config/quay_io_repo_images
-    executable: /bin /bin/bash
+    executable: /bin/bash
   loop:
     - eda-server-operator.tar
     - eda-server.tar
