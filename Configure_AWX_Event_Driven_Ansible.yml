@@ -17,7 +17,7 @@
 
 
     - name: ansible_aap_controller
-      prompt: "Enter the hostname of the Ansible AAP/AWX Controller Server"
+      prompt: "Enter the hostname of the Ansible AAP/AWX Controller Server or its IP address"
       private: no  
 
   roles:
