@@ -38,23 +38,37 @@
     - redis-6-c9s:c9s
 
 
+
 - name: Get list of Podman images
   command: podman images --format "{{'{{.ID}}'}} {{'{{.Repository}}:{{.Tag}}'}}"
   register: podman_images
   changed_when: false
 
-- name: Filter quay.io images
+- name: Define expected image mappings
   set_fact:
-    quay_images: "{{ podman_images.stdout_lines | select('search', '^.* quay.io/') | list }}"
+    expected_images:
+      quay.io/philip860/eda-ui:main: "quay.io/ansible/eda-ui:main"
+      quay.io/philip860/eda-server:main: "quay.io/ansible/eda-server:main"
+      quay.io/philip860/postgresql-15-c9s:latest: "quay.io/sclorg/postgresql-15-c9s:latest"
+      quay.io/philip860/eda-server-operator:main: "quay.io/ansible/eda-server-operator:main"
+      quay.io/philip860/redis-6-c9s:c9s: "quay.io/sclorg/redis-6-c9s:c9s"
 
-- name: Extract image IDs and repositories
+- name: Extract image IDs for the expected quay.io images
   set_fact:
-    image_mappings: "{{ quay_images | map('split', ' ') | list }}"
+    image_id_map: "{{ image_id_map | default({}) | combine({item.split(' ')[1]: item.split(' ')[0]}) }}"
+  loop: "{{ podman_images.stdout_lines }}"
+  when: item.split(' ')[1] in expected_images.keys()
 
-- name: Run podman tag for quay.io images
-  command: podman tag {{ item[0] }} {{ item[1] }}
-  loop: "{{ image_mappings }}"
-  when: item[0] is defined and item[1] is defined
+- name: Create final mapping for tagging
+  set_fact:
+    tag_mappings: "{{ tag_mappings | default([]) + [{'id': image_id_map[item], 'new_repo': expected_images[item]}] }}"
+  loop: "{{ expected_images.keys() }}"
+  when: item in image_id_map
+
+  
+- name: Run podman tag with dynamically mapped IDs
+  command: podman tag {{ item.id }} {{ item.new_repo }}
+  loop: "{{ tag_mappings }}"
 
 
 
