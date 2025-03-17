@@ -9,7 +9,7 @@
 
     - name: eda_single_node
       prompt: "Please enter a name for sever to run awx install playbook on"
-    #   private: no 
+      private: no 
 
     # - name: eda_user_password_var
     #   prompt: "Enter a password for local awx user to be created on system"
