@@ -4,8 +4,8 @@ resources:
   - github.com/ansible/eda-server-operator/config/default
 
 images:
-  - name: quay.io/philip860/eda-server-operator
-    newTag: fix-nginx-not-redirecting-to-eda-login-page
+  - name: quay.io/philip860/ansible/eda-server-operator
+    newTag: 0.0.1
 
 # Specify a custom namespace in which to install EDA
 namespace: eda
