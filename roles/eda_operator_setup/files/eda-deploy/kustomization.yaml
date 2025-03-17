@@ -1,7 +1,7 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-  - github.com/ansible/eda-server-operator/config/default
+  - github.com/philip860/eda-server-operator/config/default
 
 images:
   - name: quay.io/philip860/ansible/eda-server-operator
