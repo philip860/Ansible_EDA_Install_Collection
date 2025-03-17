@@ -78,6 +78,12 @@
         state: link
     
 
+    - name: Create ctr Symbolic Link
+      ansible.builtin.file: 
+        src: "/usr/local/bin/ctr"
+        dest: '/usr/bin/ctr'
+        state: link
+    
 
 
   #Fixing Bug with k3s not installing correctly 
