@@ -4,8 +4,9 @@ resources:
   - github.com/philip860/eda-server-operator/config/default
 
 images:
-  - name: quay.io/philip860/ansible/eda-server-operator
-    newTag: 1.0.2
+  - name: quay.io/ansible/eda-server-operator
+    newName: quay.io/philip860/ansible/eda-server-operator
+    newTag: 0.0.1
 
 # Specify a custom namespace in which to install EDA
 namespace: eda
