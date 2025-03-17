@@ -72,7 +72,7 @@
 
 
 
-- name: Save the newly tagged quay.io eda Images In quay_io_repo_images Directory
+- name: Transfter Saved Podman Images To K3s
   ansible.builtin.shell: "ctr -n k8s.io images import {{ item }}"
   args: 
     chdir: /admin_tools/eda_awx_install_config/quay_io_repo_images
