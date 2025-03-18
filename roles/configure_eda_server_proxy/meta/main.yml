@@ -7,6 +7,8 @@ galaxy_info:
   platforms:
     - name: "GenericLinux"
   galaxy_tags:
-    - security
-    - password
+    - eda
+    - ansible-eda
+    - ansible-awx
+    - ansible-aap
 dependencies: []
