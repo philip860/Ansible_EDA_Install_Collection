@@ -178,8 +178,8 @@ Image shows: user prompts for the required information needed at the beginning o
 
 Image shows: what a user might see if they ran a 'kubectl get pods -n eda' while the ansible-playbook is running the installation.
 
-### 3. EDA Web Browser Show Migration In Progress
-![Web browser waiting for pods to initialize](https://raw.githubusercontent.com/philip860/Ansible_EDA_Install_Collection/main/screenshots/EDA-Server-Upgrade-Message.png)
+### 3. EDA Install Completed Progress
+![Install completed](https://raw.githubusercontent.com/philip860/Ansible_EDA_Install_Collection/main/screenshots/EDA-Server-Install-Finished.PNG)
 
 Image shows: what a user will see if they tried to access EDA-Server with a web browser before the pods finished initializing.
 
