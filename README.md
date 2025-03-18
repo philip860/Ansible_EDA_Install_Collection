@@ -169,7 +169,7 @@ Once the playbook completes, verify the EDA setup:
 ## Installation Workflow
 
 ### 1. Start of Installation and Variable Prompts
-![Initial variable prompts](https://raw.githubusercontent.com/philip860/Ansible_EDA_Install_Collection/main/screenshots/EDA-Server-Install.png)
+![Initial variable prompts](https://raw.githubusercontent.com/philip860/Ansible_EDA_Install_Collection/main/screenshots/EDA-Server-Install.PNG)
 
 Image shows: user prompts for the required information needed at the beginning of the installation process.
 
