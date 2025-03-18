@@ -16,7 +16,7 @@ This role should be executed as part of an AWX installation process where K3s is
 
 ## Documentation
 
-For more details on AWX installation and Kubernetes configuration, refer to:
+For more details on EDA installation and Kubernetes configuration, refer to:
 - [AWX Documentation](https://ranchermanager.docs.rancher.com/getting-started/installation-and-upgrade/install-upgrade-on-a-kubernetes-cluster)
 
 
