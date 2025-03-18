@@ -1,27 +1,27 @@
-# AWX Operator
+# EDA Operator
 
 ## Overview
 
-The AWX Operator is an Ansible-based Kubernetes Operator designed to manage the lifecycle of [AWX](https://github.com/ansible/awx) instances within a Kubernetes cluster. Built with the Operator SDK and Ansible, it streamlines the deployment, management, and maintenance of AWX, providing a consistent and automated approach to handling AWX installations.
+The EDA Operator is an Ansible-based Kubernetes Operator designed to manage the lifecycle of [EDA](https://github.com/ansible/eda) instances within a Kubernetes cluster. Built with the Operator SDK and Ansible, it streamlines the deployment, management, and maintenance of EDA, providing a consistent and automated approach to handling EDA installations.
 
 ## Prerequisites
 
-Before deploying the AWX Operator, ensure you have the following:
+Before deploying the EDA Operator, ensure you have the following:
 
 - **Kubernetes Cluster**: A functioning Kubernetes cluster (e.g., OpenShift, Kubernetes, Minikube).
 - **kubectl**: The Kubernetes command-line tool should be installed and configured to interact with your cluster.
 - **Helm (optional)**: Used for managing Kubernetes applications.
-- **Ansible**: Required for contributing to the AWX Operator.
+- **Ansible**: Required for contributing to the EDA Operator.
 
 ## Installation
 
-### 1. Clone the AWX Operator Repository
+### 1. Clone the EDA Operator Repository
 
-Begin by cloning the AWX Operator repository:
+Begin by cloning the EDA Operator repository:
 
 ```bash
-git clone https://github.com/ansible/awx-operator.git
-cd awx-operator
+git clone https://github.com/ansible/eda-server-operator
+cd eda-operator
 ```
 
 ### 2. Checkout the Desired Release
@@ -37,7 +37,7 @@ Replace `<tag>` with the specific version you intend to deploy, such as `2.19.1`
 
 ### 3. Deploy the Operator Using Kustomize
 
-With a running Kubernetes cluster, deploy the AWX Operator using Kustomize:
+With a running Kubernetes cluster, deploy the EDA Operator using Kustomize:
 
 ```bash
 kubectl apply -k .
@@ -47,60 +47,60 @@ This command applies the necessary manifests to your cluster.
 
 ### 4. Verify Operator Deployment
 
-Confirm that the AWX Operator is running:
+Confirm that the EDA Operator is running:
 
 ```bash
-kubectl get pods -n awx
+kubectl get pods -n eda
 ```
 
-You should see the `awx-operator-controller-manager` pod in a running state.
+You should see the `eda-operator-controller-manager` pod in a running state.
 
-## Deploying an AWX Instance
+## Deploying an EDA Instance
 
-### 1. Create an AWX Custom Resource
+### 1. Create an EDA Custom Resource
 
-Define the AWX instance by creating a YAML file, such as `awx-demo.yml`, with the following content:
+Define the EDA instance by creating a YAML file, such as `eda-demo.yml`, with the following content:
 
 ```yaml
-apiVersion: awx.ansible.com/v1beta1
-kind: AWX
+apiVersion: eda.ansible.com/v1beta1
+kind: EDA
 metadata:
-  name: awx-demo
+  name: eda-demo
 spec:
   service_type: nodeport
 ```
 
 ### 2. Apply the Custom Resource
 
-Apply the AWX custom resource to deploy the instance:
+Apply the EDA custom resource to deploy the instance:
 
 ```bash
-kubectl apply -f awx-demo.yml
+kubectl apply -f eda-demo.yml
 ```
 
 Monitor the deployment:
 
 ```bash
-kubectl get pods -l "app.kubernetes.io/managed-by=awx-operator"
+kubectl get pods -l "app.kubernetes.io/managed-by=eda-operator"
 ```
 
-Once the pods are running, your AWX instance is ready.
+Once the pods are running, your EDA instance is ready.
 
 ## Configuration Options
 
-The AWX Operator offers various customization options:
+The EDA Operator offers various customization options:
 
 - **Admin User Configuration**: Set the admin username, email, and password via Kubernetes secrets.
 - **Database Configuration**: Configure external PostgreSQL databases or allow the operator to manage an internal PostgreSQL service.
-- **Extra Settings**: Pass additional settings to AWX using the `extra_settings` parameter.
+- **Extra Settings**: Pass additional settings to EDA using the `extra_settings` parameter.
 
 ## Documentation
 
-Comprehensive documentation for the AWX Operator is available at [AWX Operator Documentation](https://ansible.readthedocs.io/projects/awx-operator/).
+Comprehensive documentation for the EDA Operator is available at [EDA Operator Documentation](https://ansible.readthedocs.io/projects/eda-operator/).
 
 ## Contributing
 
-Contributions are welcome. Please refer to the [contributing guidelines](https://github.com/ansible/awx-operator/blob/devel/CONTRIBUTING.md) for more information.
+Contributions are welcome. Please refer to the [contributing guidelines](https://github.com/ansible/eda-operator/blob/devel/CONTRIBUTING.md) for more information.
 
 ## License
 
@@ -108,9 +108,9 @@ This project is licensed under the Apache-2.0 License.
 
 ## Author
 
-The AWX Operator was originally built by the Ansible Team. For real-time interactions, join the community on Matrix:
+The EDA Operator was originally built by the Ansible Team. For real-time interactions, join the community on Matrix:
 
-- **AWX Discussions**: [#awx:ansible.com](https://matrix.to/#/#awx:ansible.com)
+- **EDA Discussions**: [#eda:ansible.com](https://matrix.to/#/#eda:ansible.com)
 
 For more communication channels, visit the [Ansible communication guide](https://docs.ansible.com/ansible/latest/community/communication.html).
 
