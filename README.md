@@ -64,7 +64,7 @@ Alternatively,
 The following software components are used to complete the EDA standalone server installation:
 
 - **EDA Operator**: Automates the deployment and management of EDA in Kubernetes.
-  - Version: `2.19.1`
+  - Version: `main`
 - **K3s**: A lightweight Kubernetes distribution used to run EDA.
   - Version: `v1.31.6+k3s1`
 - **Helm**: A package manager for Kubernetes, used to manage EDA deployment.
