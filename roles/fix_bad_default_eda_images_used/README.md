@@ -1,22 +1,22 @@
-# Waiting for Pods to come online
+# Temporary Fix for bad default Images Role
 
 ## Overview
 
-This Ansible role watches the AWX-pods to make sure they are fully initialized. 
+This Ansible role pulls down older tested EDA images from quay.io/philip860  to make sure they are fully initialized. 
 
 ## Key Functions
 
 
-- **Wait for pods to initialize**: Watches kubernetes AWX-Pods.
+- **Work around for issue with version: main & version: 1.0.2**: Pulls down and replaces k3s default EDA images with ones from quay.io/philip860.
 
 
 ## Usage
 
-This role should be executed as part of an AWX installation process where K3s is required as the Kubernetes environment and Nginx is used as the ingress controller.
+This role should ONLY be used if you experience an issue using the default images in your environment.
 
 ## Documentation
 
-For more details on AWX installation and Kubernetes configuration, refer to:
+For more details on EDA installation and Kubernetes configuration, refer to:
 - [Kuberentes Documentation](https://kubernetes.io/docs/home/)
 
 
