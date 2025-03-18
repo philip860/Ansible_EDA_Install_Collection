@@ -155,20 +155,13 @@ Once the playbook completes, verify the EDA setup:
 - A default SSL cert (tls.crt) & key (tls.key), is created to enable HTTPS for the EDA server.
 - The default cert is located here:
 ```sh
-  ls /admin_tools/eda-operator/eda-deploy/
+  ls /etc/nginx/certs/
 ```
 - To add your own custom SSL certs you will need to replace the default (tls.crt) & key (tls.key)
 ```sh
-  cd /admin_tools/eda-operator/eda-deploy/
-  mv tls.crt tls-old.crt
-  mv tls.key tls-old.key 
-  cp -r /full_path/server.crt tls.crt
-  cp -r /full_path/server.key tls.key
-  kubectl apply -k eda-deploy
-  kubectl create secret tls eda-secret-tls -n eda  --cert=/admin_tools/eda-operator/eda-deploy/tls.crt --key=/admin_tools/eda-operator/eda-deploy/tls.key  --dry-run=client -o yaml | kubectl apply -f - 
-  kubectl rollout restart deployment -n eda
-  cp -r /admin_tools/eda-operator/eda-deploy/tls.crt /etc/nginx/certs/server.crt
-  cp -r /admin_tools/eda-operator/eda-deploy/tls.key /etc/nginx/certs/server.key
+  openssl req -x509 -newkey rsa:2048 -keyout req.key -out req.crt -nodes -days 365 -subj "/C=US/ST=North Carolina/L=Raleigh/O=RedHat/CN=quart.apps.ocp4.example.com"
+  cp -r /full_path/req.crt /etc/nginx/certs/server.crt
+  cp -r /full_path/req.key /etc/nginx/certs/server.key
   systemctl restart nginx
 ```
 
