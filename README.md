@@ -25,11 +25,10 @@ This playbook includes optional interactive prompts for user inputs. Uncomment t
 
 #### Required Variables:
 - `eda_single_node`: Target server for EDA installation
-- `eda_postgres_db_password`: Password for EDA PostgreSQL database
-- `secret_key`: Secret key for encrypting PostgreSQL database
-- `eda_admin_username`: EDA admin username
-- `eda_admin_username_password`: EDA admin user password
 - `eda_user_password_var`: Password for the local EDA user
+- `ansible_aap_controller`:  Hostname of the Ansible AAP/AWX Controller Server
+
+
 
 ### Roles Used in the Playbook
 
