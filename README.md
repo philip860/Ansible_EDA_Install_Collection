@@ -39,6 +39,10 @@ The playbook uses the following roles:
 3. **generate_self_signed_tls_certs_for_eda_server** - Creates self-signed TLS certificates for secure communication.
 4. **eda_operator_setup** - Deploys the EDA Operator to manage EDA in Kubernetes.
 5. **configure_standalone_eda_server** - Configures and finalizes the standalone EDA server setup.
+6. **configure_eda_server_proxy** - Configures Nginx reverse proxy server.
+7. **wait_for_pods_to_initialize** - Wait for pods to fully initialize.
+
+
 
 ## Operating Systems Install Tested On
 
