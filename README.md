@@ -218,6 +218,12 @@ The following commands can help to shed some light on possible installation issu
   kubectl logs eda-operator-controller-manager-subject_to_change -f -n eda
 ```
 
+
+## Closing
+The EDA server requires a Ansible AAP/AWX Controller node to be already setup in advance in order to work properly.
+
+In your AAP/AWX Server, you need to generate a Oauth token and then use that in the EDA server, which will connect back to the AAP/AWX server to run the playbooks there. 
+
 ## License
 This project is licensed under the MIT License.
 
