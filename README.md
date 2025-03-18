@@ -1,9 +1,9 @@
-# AWX Standalone Server Installation
+# EDA Standalone Server Installation
 
 ## Overview
-This Ansible playbook automates the installation and configuration of an AWX standalone server. AWX is an open-source web-based automation platform that provides a user-friendly interface for Ansible.
+This Ansible playbook automates the installation and configuration of an EDA standalone server. EDA is an open-source web-based automation platform that provides a user-friendly interface for Ansible.
 
-This is not a development AWX-server but a fully functionality install of a Ansible AWX Server.
+This is not a development EDA-server but a fully functionality install of a Ansible EDA Server.
 
 ## Prerequisites
 
@@ -17,33 +17,33 @@ This is not a development AWX-server but a fully functionality install of a Ansi
 
 ### Playbook Name
 
-**configure_awx_standalone.yml**
+**configure_eda_standalone.yml**
 
 ### Variables (Prompted or Predefined)
 
 This playbook includes optional interactive prompts for user inputs. Uncomment the `vars_prompt` section in the playbook to enable them, or define the variables manually.
 
 #### Required Variables:
-- `awx_single_node`: Target server for AWX installation
-- `awx_postgres_db_password`: Password for AWX PostgreSQL database
+- `eda_single_node`: Target server for EDA installation
+- `eda_postgres_db_password`: Password for EDA PostgreSQL database
 - `secret_key`: Secret key for encrypting PostgreSQL database
-- `awx_admin_username`: AWX admin username
-- `awx_admin_username_password`: AWX admin user password
-- `awx_user_password_var`: Password for the local AWX user
+- `eda_admin_username`: EDA admin username
+- `eda_admin_username_password`: EDA admin user password
+- `eda_user_password_var`: Password for the local EDA user
 
 ### Roles Used in the Playbook
 
 The playbook uses the following roles:
 
-1. **install_required_packages** - Installs dependencies required for AWX.
-2. **install_k3s** - Sets up a lightweight Kubernetes distribution (K3s) for AWX.
-3. **generate_self_signed_tls_certs_for_awx_server** - Creates self-signed TLS certificates for secure communication.
-4. **awx_operator_setup** - Deploys the AWX Operator to manage AWX in Kubernetes.
-5. **configure_standalone_awx_server** - Configures and finalizes the standalone AWX server setup.
+1. **install_required_packages** - Installs dependencies required for EDA.
+2. **install_k3s** - Sets up a lightweight Kubernetes distribution (K3s) for EDA.
+3. **generate_self_signed_tls_certs_for_eda_server** - Creates self-signed TLS certificates for secure communication.
+4. **eda_operator_setup** - Deploys the EDA Operator to manage EDA in Kubernetes.
+5. **configure_standalone_eda_server** - Configures and finalizes the standalone EDA server setup.
 
 ## Operating Systems Install Tested On
 
-The following operating systems were tested with this AWX standalone server installation:
+The following operating systems were tested with this EDA standalone server installation:
 
 Alternatively,
   - Version: `8/9`
@@ -58,28 +58,28 @@ Alternatively,
 
 ## Essential Software Components
 
-The following software components are used to complete the AWX standalone server installation:
+The following software components are used to complete the EDA standalone server installation:
 
-- **AWX Operator**: Automates the deployment and management of AWX in Kubernetes.
+- **EDA Operator**: Automates the deployment and management of EDA in Kubernetes.
   - Version: `2.19.1`
-- **K3s**: A lightweight Kubernetes distribution used to run AWX.
+- **K3s**: A lightweight Kubernetes distribution used to run EDA.
   - Version: `v1.31.6+k3s1`
-- **Helm**: A package manager for Kubernetes, used to manage AWX deployment.
+- **Helm**: A package manager for Kubernetes, used to manage EDA deployment.
   - Version: `v3.15.3`
-- **PostgreSQL**: The database backend for AWX.
+- **PostgreSQL**: The database backend for EDA.
   - Version: `15`
 
 ## Keynote: K3s and Ingress Configuration
 
-By default, K3s installs the Traefik Ingress Controller, which uses strict DNS resolution. While this may be suitable for some environments, it can cause issues with AWX resolving to the backend correctly, unless you use the EXACT hostname use specified at the star of the install. To ensure broader compatibility and improved functionality across various use cases, we have removed the Traefik Ingress Controller and instead set up an NGINX proxy directly on the server. This provides greater flexibility in managing ingress traffic and enhances overall system performance.
+By default, K3s installs the Traefik Ingress Controller, which uses strict DNS resolution. While this may be suitable for some environments, it can cause issues with EDA resolving to the backend correctly, unless you use the EXACT hostname use specified at the star of the install. To ensure broader compatibility and improved functionality across various use cases, we have removed the Traefik Ingress Controller and instead set up an NGINX proxy directly on the server. This provides greater flexibility in managing ingress traffic and enhances overall system performance.
 
 ## Installation Steps
 
 ### 1. Clone the Repository (Option 1)
 
 ```sh
-git clone https://github.com/philip860/Ansible_AWX_Install_Collection
-cd ansible-awx-install
+git clone https://github.com/philip860/Ansible_EDA_Install_Collection
+cd ansible-eda-install
 ```
 
 ### 1. Install via Ansible Galaxy (Option 2)
@@ -87,7 +87,7 @@ cd ansible-awx-install
 Alternatively, you can install the collection from Ansible Galaxy:
 
 ```sh
-ansible-galaxy collection install philip860.awx_install
+ansible-galaxy collection install philip860.eda_install
 ```
 
 ### 2. Update Inventory and Variables
@@ -100,10 +100,10 @@ Alternatively, you can define variables in `vars/main.yml` instead of using prom
 
 When the playbook runs you will be prompted to specify passwords for the following:
 
-- `awx_postgres_db_password`: Password for AWX PostgreSQL database
+- `eda_postgres_db_password`: Password for EDA PostgreSQL database
 - `secret_key`: Secret key for encrypting PostgreSQL database
-- `awx_admin_username_password`: AWX admin user password
-- `awx_user_password_var`: Password for the local AWX user
+- `eda_admin_username_password`: EDA admin user password
+- `eda_user_password_var`: Password for the local EDA user
 
 You can generate random passwords using this command below:
 
@@ -116,22 +116,22 @@ date +%s | sha256sum | base64 | head -c 32 ; echo
 For repository installation, execute the playbook using:
 
 ```sh
-ansible-playbook configure_awx_standalone.yml -vvv
+ansible-playbook configure_eda_standalone.yml -vvv
 ```
 
 If using the Ansible Galaxy collection, execute the playbook using:
 
 ```sh
-ansible-playbook "$HOME/.ansible/collections/ansible_collections/philip860/awx_install/Configure_AWX_Standalone_Server.yml" -vvv
+ansible-playbook "$HOME/.ansible/collections/ansible_collections/philip860/eda_install/Configure_EDA_Standalone_Server.yml" -vvv
 ```
 
 If using prompts, remove `vars_prompt` comments before running.
 
 ### 6. Verify the Installation
 
-Once the playbook completes, verify the AWX setup:
+Once the playbook completes, verify the EDA setup:
 
-- Access AWX via the web UI: `https://<server-ip>`
+- Access EDA via the web UI: `https://<server-ip>`
 - Log in with the admin credentials specified earlier. (Ansible playbook will show users the admin password at the end.)
 
 ## Troubleshooting
@@ -140,34 +140,34 @@ Once the playbook completes, verify the AWX setup:
 - Check logs for errors:
   ```sh
   journalctl -u k3s -f
-  kubectl logs -n awx awx-operator-xxxx
+  kubectl logs -n eda eda-operator-xxxx
   ```
 - Validate Kubernetes pods:
   ```sh
-  kubectl get pods -n awx
+  kubectl get pods -n eda
   ```
 
 
 
 ## SSL Cert Update
 
-- A default SSL cert (tls.crt) & key (tls.key), is created to enable HTTPS for the AWX server.
+- A default SSL cert (tls.crt) & key (tls.key), is created to enable HTTPS for the EDA server.
 - The default cert is located here:
 ```sh
-  ls /admin_tools/awx-operator/awx-deploy/
+  ls /admin_tools/eda-operator/eda-deploy/
 ```
 - To add your own custom SSL certs you will need to replace the default (tls.crt) & key (tls.key)
 ```sh
-  cd /admin_tools/awx-operator/awx-deploy/
+  cd /admin_tools/eda-operator/eda-deploy/
   mv tls.crt tls-old.crt
   mv tls.key tls-old.key 
   cp -r /full_path/server.crt tls.crt
   cp -r /full_path/server.key tls.key
-  kubectl apply -k awx-deploy
-  kubectl create secret tls awx-secret-tls -n awx  --cert=/admin_tools/awx-operator/awx-deploy/tls.crt --key=/admin_tools/awx-operator/awx-deploy/tls.key  --dry-run=client -o yaml | kubectl apply -f - 
-  kubectl rollout restart deployment -n awx
-  cp -r /admin_tools/awx-operator/awx-deploy/tls.crt /etc/nginx/certs/server.crt
-  cp -r /admin_tools/awx-operator/awx-deploy/tls.key /etc/nginx/certs/server.key
+  kubectl apply -k eda-deploy
+  kubectl create secret tls eda-secret-tls -n eda  --cert=/admin_tools/eda-operator/eda-deploy/tls.crt --key=/admin_tools/eda-operator/eda-deploy/tls.key  --dry-run=client -o yaml | kubectl apply -f - 
+  kubectl rollout restart deployment -n eda
+  cp -r /admin_tools/eda-operator/eda-deploy/tls.crt /etc/nginx/certs/server.crt
+  cp -r /admin_tools/eda-operator/eda-deploy/tls.key /etc/nginx/certs/server.key
   systemctl restart nginx
 ```
 
@@ -175,30 +175,30 @@ Once the playbook completes, verify the AWX setup:
 ## Installation Workflow
 
 ### 1. Start of Installation and Variable Prompts
-![Initial variable prompts](https://raw.githubusercontent.com/philip860/Ansible_AWX_Install_Collection/main/screenshots/AWX-Server-Install.png)
+![Initial variable prompts](https://raw.githubusercontent.com/philip860/Ansible_EDA_Install_Collection/main/screenshots/EDA-Server-Install.png)
 
 Image shows: user prompts for the required information needed at the beginning of the installation process.
 
 ### 2. Pods Starting to Initialize
-![Pods starting to initialize](https://raw.githubusercontent.com/philip860/Ansible_AWX_Install_Collection/main/screenshots/AWX-Server-Migration-Pod.png)
+![Pods starting to initialize](https://raw.githubusercontent.com/philip860/Ansible_EDA_Install_Collection/main/screenshots/EDA-Server-Migration-Pod.png)
 
-Image shows: what a user might see if they ran a 'kubectl get pods -n awx' while the ansible-playbook is running the installation.
+Image shows: what a user might see if they ran a 'kubectl get pods -n eda' while the ansible-playbook is running the installation.
 
-### 3. AWX Web Browser Show Migration In Progress
-![Web browser waiting for pods to initialize](https://raw.githubusercontent.com/philip860/Ansible_AWX_Install_Collection/main/screenshots/AWX-Server-Upgrade-Message.png)
+### 3. EDA Web Browser Show Migration In Progress
+![Web browser waiting for pods to initialize](https://raw.githubusercontent.com/philip860/Ansible_EDA_Install_Collection/main/screenshots/EDA-Server-Upgrade-Message.png)
 
-Image shows: what a user will see if they tried to access AWX-Server with a web browser before the pods finished initializing.
+Image shows: what a user will see if they tried to access EDA-Server with a web browser before the pods finished initializing.
 
 
 ### 4. Pods Finshed Initializing - Login Ready!
-![Default login screen](https://raw.githubusercontent.com/philip860/Ansible_AWX_Install_Collection/main/screenshots/Default-Login-Screen.png)
+![Default login screen](https://raw.githubusercontent.com/philip860/Ansible_EDA_Install_Collection/main/screenshots/Default-Login-Screen.png)
 
-Image shows: Default AWX login screen accessible after the pods finised initializing.
+Image shows: Default EDA login screen accessible after the pods finised initializing.
 
-### 5. Successfully logged in - AWX GUI
-![AWX GUI](https://raw.githubusercontent.com/philip860/Ansible_AWX_Install_Collection/main/screenshots/AWX-GUI.png)
+### 5. Successfully logged in - EDA GUI
+![EDA GUI](https://raw.githubusercontent.com/philip860/Ansible_EDA_Install_Collection/main/screenshots/EDA-GUI.png)
 
-Image shows: User logged into AWX server, via the admin user.
+Image shows: User logged into EDA server, via the admin user.
 
 
 ## Final Notes
@@ -206,22 +206,22 @@ Depending on your system's resources this installation can take anywhere from ab
 
 If any issues occur during the build, first check to make sure your system has enough free storage available.
 
-The following commands can help to shed some light on possible installation issues with AWX & Kubernetes Use the command "kubectl get pods -n awx" to get the full names of the pods because they are subject to change.
+The following commands can help to shed some light on possible installation issues with EDA & Kubernetes Use the command "kubectl get pods -n eda" to get the full names of the pods because they are subject to change.
 
-- Show all awx related pods running for kubernetes:
+- Show all eda related pods running for kubernetes:
 ```sh
-  kubectl get pods -n awx
+  kubectl get pods -n eda
 ```
-- Show all related events for awx deployment in kubernetes:
+- Show all related events for eda deployment in kubernetes:
 
 ```sh
-  kubectl get events -n awx
+  kubectl get events -n eda
 ```
 
-- Show all related information for the awx-operator-controller-manager pod:
+- Show all related information for the eda-operator-controller-manager pod:
 
 ```sh
-  kubectl logs awx-operator-controller-manager-subject_to_change -f -n awx
+  kubectl logs eda-operator-controller-manager-subject_to_change -f -n eda
 ```
 
 ## License

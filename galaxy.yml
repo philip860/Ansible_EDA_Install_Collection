@@ -5,7 +5,7 @@
 namespace: philip860
 
 # The name of the collection. Has the same character restrictions as 'namespace'
-name: awx_install
+name: eda_install
 
 # The version of the collection. Must be compatible with semantic versioning
 version: 24.6.1
@@ -21,7 +21,7 @@ authors:
 
 ### OPTIONAL but strongly recommended
 # A short summary description of the collection
-description: Ansible-AWX Server Install
+description: Ansible-EDA Server Install
 
 # Either a single license or a list of licenses for content inside of a collection. Ansible Galaxy currently only
 # accepts L(SPDX,https://spdx.org/licenses/) licenses. This key is mutually exclusive with 'license_file'
@@ -43,10 +43,10 @@ tags: []
 dependencies: {}
 
 # The URL of the originating SCM repository
-repository: https://github.com/philip860/Ansible_AWX_Install_Collection
+repository: https://github.com/philip860/Ansible_EDA_Install_Collection
 
 # The URL to any online docs
-documentation: https://github.com/philip860/Ansible_AWX_Install_Collection
+documentation: https://github.com/philip860/Ansible_EDA_Install_Collection
 
 # The URL to the homepage of the collection/project
 homepage: https://duncan-networks.com/
