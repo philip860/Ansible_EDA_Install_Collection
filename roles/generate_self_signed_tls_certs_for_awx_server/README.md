@@ -2,7 +2,7 @@
 
 ## Overview
 
-This Ansible role automates the setup and configuration of SSL certs for Nginx, and associated services to support AWX deployment within a Kubernetes environment. It ensures that SSL certs are set up correctly for Nginx.
+This Ansible role automates the setup and configuration of SSL certs for Nginx, and associated services to support EDA deployment within a Kubernetes environment. It ensures that SSL certs are set up correctly for Nginx.
 
 ## Key Functions
 
@@ -12,12 +12,12 @@ This Ansible role automates the setup and configuration of SSL certs for Nginx, 
 
 ## Usage
 
-This role should be executed as part of an AWX installation process where K3s is required as the Kubernetes environment and Nginx is used as the ingress controller.
+This role should be executed as part of an EDA installation process where K3s is required as the Kubernetes environment and Nginx is used as the ingress controller.
 
 ## Documentation
 
-For more details on AWX installation and Kubernetes configuration, refer to:
-- [AWX Documentation](https://ansible.readthedocs.io/projects/awx/)
+For more details on EDA installation and Kubernetes configuration, refer to:
+- [EDA Documentation](https://ansible.readthedocs.io/projects/eda/)
 
 
 ## License
