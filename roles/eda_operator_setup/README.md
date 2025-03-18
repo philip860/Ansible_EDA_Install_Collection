@@ -2,7 +2,7 @@
 
 ## Overview
 
-The EDA Operator is an Ansible-based Kubernetes Operator designed to manage the lifecycle of [EDA](https://github.com/ansible/eda) instances within a Kubernetes cluster. Built with the Operator SDK and Ansible, it streamlines the deployment, management, and maintenance of EDA, providing a consistent and automated approach to handling EDA installations.
+The EDA Operator is an Ansible-based Kubernetes Operator designed to manage the lifecycle of [EDA](https://github.com/ansible/event-driven-ansible) instances within a Kubernetes cluster. Built with the Operator SDK and Ansible, it streamlines the deployment, management, and maintenance of EDA, providing a consistent and automated approach to handling EDA installations.
 
 ## Prerequisites
 
@@ -100,7 +100,7 @@ Comprehensive documentation for the EDA Operator is available at [EDA Operator D
 
 ## Contributing
 
-Contributions are welcome. Please refer to the [contributing guidelines](https://github.com/ansible/eda-operator/blob/devel/CONTRIBUTING.md) for more information.
+Contributions are welcome. Please refer to the [contributing guidelines](https://github.com/ansible/eda-server-operator/blob/main/CONTRIBUTING.md) for more information.
 
 ## License
 
