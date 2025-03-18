@@ -94,9 +94,7 @@ The EDA Operator offers various customization options:
 - **Database Configuration**: Configure external PostgreSQL databases or allow the operator to manage an internal PostgreSQL service.
 - **Extra Settings**: Pass additional settings to EDA using the `extra_settings` parameter.
 
-## Documentation
 
-Comprehensive documentation for the EDA Operator is available at [EDA Operator Documentation](https://ansible.readthedocs.io/projects/eda-operator/).
 
 ## Contributing
 
