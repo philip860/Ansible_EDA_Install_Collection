@@ -103,10 +103,8 @@ Alternatively, you can define variables in `vars/main.yml` instead of using prom
 
 When the playbook runs you will be prompted to specify passwords for the following:
 
-- `eda_postgres_db_password`: Password for EDA PostgreSQL database
-- `secret_key`: Secret key for encrypting PostgreSQL database
-- `eda_admin_username_password`: EDA admin user password
-- `eda_user_password_var`: Password for the local EDA user
+- `eda_user_password_var`: Password for EDA PostgreSQL database
+
 
 You can generate random passwords using this command below:
 
