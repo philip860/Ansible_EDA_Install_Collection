@@ -1,7 +1,7 @@
 
 galaxy_info:
   author: "Philip Duncan"
-  description: "Ansible role for waiting for AWX pods to initialize"
+  description: "Ansible role for fixing issue with Default EDA images used by eda-operator"
   license: "GPL-3.0-or-later"
   min_ansible_version: "2.9"
   platforms:
