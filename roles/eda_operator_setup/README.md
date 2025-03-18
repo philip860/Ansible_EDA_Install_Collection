@@ -62,12 +62,18 @@ You should see the `eda-operator-controller-manager` pod in a running state.
 Define the EDA instance by creating a YAML file, such as `eda-demo.yml`, with the following content:
 
 ```yaml
-apiVersion: eda.ansible.com/v1beta1
+apiVersion: eda.ansible.com/v1alpha1
 kind: EDA
 metadata:
-  name: eda-demo
+  name: eda
+  namespace: eda
 spec:
+  automation_server_url: https://<hostname:IP Address>
   service_type: nodeport
+  automation_server_ssl_verify: "false"
+  no_log: false
+
+
 ```
 
 ### 2. Apply the Custom Resource
