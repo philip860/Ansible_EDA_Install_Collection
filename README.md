@@ -123,7 +123,7 @@ ansible-playbook configure_eda_standalone.yml -vvv
 If using the Ansible Galaxy collection, execute the playbook using:
 
 ```sh
-ansible-playbook "$HOME/.ansible/collections/ansible_collections/philip860/eda_install/Configure_EDA_Standalone_Server.yml" -vvv
+ansible-playbook "$HOME/.ansible/collections/ansible_collections/philip860/eda_install/Configure_AWX_Event_Driven_Ansible.yml" -vvv
 ```
 
 If using prompts, remove `vars_prompt` comments before running.
