@@ -185,12 +185,12 @@ Image shows: what a user will see if they tried to access EDA-Server with a web 
 
 
 ### 4. Pods Finshed Initializing - Login Ready!
-![Default login screen](https://raw.githubusercontent.com/philip860/Ansible_EDA_Install_Collection/main/screenshots/Default-Login-Screen.png)
+![Default login screen](https://raw.githubusercontent.com/philip860/Ansible_EDA_Install_Collection/main/screenshots/EDA-Default-Login-Screen.PNG)
 
 Image shows: Default EDA login screen accessible after the pods finised initializing.
 
 ### 5. Successfully logged in - EDA GUI
-![EDA GUI](https://raw.githubusercontent.com/philip860/Ansible_EDA_Install_Collection/main/screenshots/EDA-GUI.png)
+![EDA GUI](https://raw.githubusercontent.com/philip860/Ansible_EDA_Install_Collection/main/screenshots/EDA-GUI.PNG)
 
 Image shows: User logged into EDA server, via the admin user.
 
