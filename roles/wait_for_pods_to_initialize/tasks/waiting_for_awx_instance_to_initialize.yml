@@ -51,6 +51,12 @@
       ansible.builtin.set_fact:
         eda_admin_password: "{{ eda_admin_secret.stdout | regex_replace('\\\\n$', '') | regex_replace('\\s+$', '') }}"
 
+
+    - name: Waiting 5mins For Migrations To Complete On The Backend
+      ansible.builtin.shell: sleep 5m
+      args:
+        executable: /bin/bash
+
     - name: Print EDA Admin Secret
       ansible.builtin.debug:
         msg: "EDA Admin Secret: {{ eda_admin_password }}"
