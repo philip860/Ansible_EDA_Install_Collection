@@ -174,7 +174,7 @@ Once the playbook completes, verify the EDA setup:
 Image shows: user prompts for the required information needed at the beginning of the installation process.
 
 ### 2. Pods Starting to Initialize
-![Pods starting to initialize](https://raw.githubusercontent.com/philip860/Ansible_EDA_Install_Collection/main/screenshots/EDA-Server-Migration-Pod.png)
+![Pods starting to initialize](https://raw.githubusercontent.com/philip860/Ansible_EDA_Install_Collection/main/screenshots/EDA-Server-Pods-Starting.PNG)
 
 Image shows: what a user might see if they ran a 'kubectl get pods -n eda' while the ansible-playbook is running the installation.
 
